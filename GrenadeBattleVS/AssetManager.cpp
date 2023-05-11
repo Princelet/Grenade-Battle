@@ -6,7 +6,7 @@ std::map<std::string, sf::SoundBuffer> AssetManager::soundBuffers;
 
 sf::Texture& AssetManager::RequestTexture(std::string assetName)
 {
-    std::string fullAsset = "Assets/Textures/" + assetName + ".png";
+    std::string fullAsset = "Grenade Battle Assets/" + assetName + ".png";
     auto pairFound = textures.find(fullAsset);
 
     if (pairFound != textures.end())
@@ -24,7 +24,7 @@ sf::Texture& AssetManager::RequestTexture(std::string assetName)
 
 sf::Font& AssetManager::RequestFont(std::string assetName)
 {
-    std::string fullAsset = "Assets/Fonts/" + assetName + ".ttf";
+    std::string fullAsset = "Grenade Battle Assets/" + assetName + ".ttf";
     auto pairFound = fonts.find(fullAsset);
 
     if (pairFound != fonts.end())
@@ -42,7 +42,7 @@ sf::Font& AssetManager::RequestFont(std::string assetName)
 
 sf::SoundBuffer& AssetManager::RequestSoundBuffer(std::string assetName)
 {
-    std::string fullAsset = "Assets/Audio/" + assetName;
+    std::string fullAsset = "Grenade Battle Assets/" + assetName;
     auto pairFound = soundBuffers.find(fullAsset);
 
     if (pairFound != soundBuffers.end())

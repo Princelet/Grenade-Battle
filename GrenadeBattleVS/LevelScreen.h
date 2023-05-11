@@ -5,6 +5,7 @@
 #include "AssetManager.h"
 
 class Game;
+class Platform;
 
 class LevelScreen :
 	public Screen
@@ -17,8 +18,11 @@ public:
 
 private:
 	void Restart();
+	bool LoadLevel();
 
-	Player player;
+	Player player1;
+	Player player2;
+	std::vector<Platform*> platforms;
 
 	bool gameRunning;
 

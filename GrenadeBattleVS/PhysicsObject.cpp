@@ -13,7 +13,6 @@ PhysicsObject::PhysicsObject()
 
 void PhysicsObject::Update(sf::Time frameTime)
 {
-
     const float DRAG = 20.0f;
     const PhysicsType physics = PhysicsType::FORWARD_EULER;
     sf::Vector2f lastFramePos = GetPosition();
@@ -105,12 +104,4 @@ void PhysicsObject::UpdateAcceleration()
     // Update acceleration
     acceleration.x = 0;
     acceleration.y = GRAVITY;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        acceleration.x = -ACCEL;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        acceleration.x = ACCEL;
-    }
 }
