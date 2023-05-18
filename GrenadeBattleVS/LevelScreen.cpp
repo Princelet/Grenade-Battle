@@ -33,7 +33,6 @@ void LevelScreen::Update(sf::Time frameTime)
 				player1.SetColliding(true);
 				platforms[i]->SetColliding(true);
 				player1.HandleCollision(*platforms[i]);
-				platforms[i]->HandleCollision(player1);
 			}
 
 			if (platforms[i]->CheckCollision(player2))
@@ -41,7 +40,6 @@ void LevelScreen::Update(sf::Time frameTime)
 				player2.SetColliding(true);
 				platforms[i]->SetColliding(true);
 				player2.HandleCollision(*platforms[i]);
-				platforms[i]->HandleCollision(player2);
 			}
 		}
 	}

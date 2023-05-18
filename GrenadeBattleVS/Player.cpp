@@ -99,7 +99,6 @@ void Player::UpdateAcceleration()
         {
             acceleration.x = ACCEL;
         }
-
     }
 
 }
