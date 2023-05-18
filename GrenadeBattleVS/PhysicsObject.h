@@ -15,7 +15,6 @@ public:
 protected:
     void UpdateAcceleration();
 
-    sf::Vector2f oldPosition;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
 };

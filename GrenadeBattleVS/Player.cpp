@@ -15,7 +15,6 @@ Player::Player()
     collisionOffset = sf::Vector2f(-24.0f, -23.0f);
     collisionScale = sf::Vector2f(0.9f, 1.0f);
 
-    oldPosition = sf::Vector2f(100, 100);
     acceleration = sf::Vector2f(100, 100);
 
     // Add sprite to my pips
@@ -72,6 +71,7 @@ void Player::UpdateAcceleration()
 {
     const float ACCEL = 3000;
     const float GRAVITY = 1000;
+    const float DEADZONE = 25;
 
     // Update acceleration
     acceleration.x = 0;
@@ -80,24 +80,46 @@ void Player::UpdateAcceleration()
     // Temp 2p movement
     if (p1)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        // P1 Movement
+        sf::Vector2f direction(0, 0);
+        if (sf::Joystick::isConnected(0))
         {
-            acceleration.x = -ACCEL;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            acceleration.x = ACCEL;
+            if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -DEADZONE)
+            {
+                acceleration.x = -ACCEL;
+            }
+            if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > DEADZONE)
+            {
+                acceleration.x = ACCEL;
+            }
         }
     }
     else
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        // P2 Movement
+        sf::Vector2f direction(0, 0);
+        if (sf::Joystick::isConnected(1))
         {
-            acceleration.x = -ACCEL;
+            if (sf::Joystick::getAxisPosition(1, sf::Joystick::X) < -DEADZONE)
+            {
+                acceleration.x = -ACCEL;
+            }
+            if (sf::Joystick::getAxisPosition(1, sf::Joystick::X) > DEADZONE)
+            {
+                acceleration.x = ACCEL;
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        else
         {
-            acceleration.x = ACCEL;
+            // Temp code if no controller 2
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            {
+                acceleration.x = -ACCEL;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            {
+                acceleration.x = ACCEL;
+            }
         }
     }
 
@@ -105,6 +127,12 @@ void Player::UpdateAcceleration()
 
 sf::Vector2f Player::GetPipPosition(float pipTime)
 {
+    /*
+    return pipAcceleration * pipTime * pipTime
+        + pipVelocity * pipTime
+        + pipStartingPos;
+    
+    */
     return sf::Vector2f(0, 1000) * pipTime * pipTime
         + sf::Vector2f(500, -1000) * pipTime
         + sf::Vector2f(500, 500);
