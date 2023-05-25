@@ -17,7 +17,6 @@ void PhysicsObject::Update(sf::Time frameTime)
 
     // Drag Calculation
     velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
-    velocity.y -= velocity.y * DRAG * frameTime.asSeconds();
 
     // Update Acceleration
     UpdateAcceleration();

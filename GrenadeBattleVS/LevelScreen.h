@@ -6,6 +6,7 @@
 
 class Game;
 class Platform;
+class Grenade;
 
 class LevelScreen :
 	public Screen
@@ -16,6 +17,8 @@ public:
 	void Update(sf::Time frameTime);
 	void Draw(sf::RenderTarget& target);
 
+	void Fire(int newPlayer);
+
 private:
 	void Restart();
 	bool LoadLevel();
@@ -23,6 +26,9 @@ private:
 	Player player1;
 	Player player2;
 	std::vector<Platform*> platforms;
+
+	int grenadeTimer;
+	std::vector<Grenade*> grenades;
 
 	bool gameRunning;
 

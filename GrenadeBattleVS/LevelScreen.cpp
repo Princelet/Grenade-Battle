@@ -3,13 +3,15 @@
 #include "LevelScreen.h"
 #include "Game.h"
 #include "Platform.h"
+#include "Grenade.h"
 
 LevelScreen::LevelScreen(Game* newGamePointer)
 	: Screen(newGamePointer)
-	, player1()
-	, player2()
+	, player1(this)
+	, player2(this)
 	, gameRunning(true)
 	, window(newGamePointer->GetWindow())
+	, grenadeTimer(0)
 {
 	Restart();
 }
@@ -42,6 +44,12 @@ void LevelScreen::Update(sf::Time frameTime)
 				player2.HandleCollision(*platforms[i]);
 			}
 		}
+
+		for (size_t i = 0; i < grenades.size(); ++i)
+		{
+			grenades[i]->Update(frameTime);
+			grenades[i]->SetColliding(false);
+		}
 	}
 	else
 	{
@@ -49,6 +57,8 @@ void LevelScreen::Update(sf::Time frameTime)
 			Restart();
 	}
 
+	if (grenadeTimer > 0)
+		--grenadeTimer;
 }
 
 void LevelScreen::Draw(sf::RenderTarget& target)
@@ -60,19 +70,42 @@ void LevelScreen::Draw(sf::RenderTarget& target)
 	{
 		platforms[i]->Draw(target);
 	}
+	for (size_t i = 0; i < grenades.size(); ++i)
+	{
+		grenades[i]->Draw(target);
+	}
+}
+
+void LevelScreen::Fire(int newPlayer)
+{
+	if (grenadeTimer == 0)
+	{
+		grenades.push_back(new Grenade);
+
+		if (newPlayer == 1)
+		{
+			grenades[grenades.size() - 1]->SetPosition(player1.GetPosition());
+		}
+		grenadeTimer = 100;
+	}
 }
 
 void LevelScreen::Restart()
 {
-
 	// Delete before clearing!
 	for (size_t i = 0; i < platforms.size(); ++i)
 	{
 		delete platforms[i];
 		platforms[i] = nullptr;
 	}
+	for (size_t i = 0; i < grenades.size(); ++i)
+	{
+		delete grenades[i];
+		grenades[i] = nullptr;
+	}
 
 	platforms.clear();
+	grenades.clear();
 
 	player1.SetP1(true);
 	player2.SetP1(false);
@@ -166,6 +199,4 @@ bool LevelScreen::LoadLevel()
 
 	// Return true since we successfully loaded the file
 	return true;
-
-
 }

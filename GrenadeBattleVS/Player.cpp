@@ -1,9 +1,11 @@
 #include "Player.h"
 #include "AssetManager.h"
+#include "LevelScreen.h"
 
-Player::Player()
+Player::Player(LevelScreen* newLevel)
     : PhysicsObject()
     , p1(true)
+    , level(newLevel)
 {
     // Starting texture
     sprite.setTexture(AssetManager::RequestTexture("player_1_stand"));
@@ -39,6 +41,21 @@ void Player::Update(sf::Time frameTime)
     {
         pips[i].setPosition(GetPipPosition(pipTime));
         pipTime = pipTimeStep;
+    }
+
+    if (p1)
+    {
+        if (sf::Joystick::isButtonPressed(0, 0))
+        {
+            level->Fire(1);
+        }
+    }
+    else
+    {
+        if (sf::Joystick::isButtonPressed(1, 0))
+        {
+            level->Fire(2);
+        }
     }
 }
 
