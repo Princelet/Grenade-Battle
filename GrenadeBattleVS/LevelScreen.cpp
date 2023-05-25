@@ -52,6 +52,16 @@ void LevelScreen::Update(sf::Time frameTime)
 		{
 			grenades[i]->Update(frameTime);
 			grenades[i]->SetColliding(false);
+
+			for (size_t j = 0; j < platforms.size(); ++j)
+			{
+				if (platforms[j]->CheckCollision((*grenades[i])))
+				{
+					(*grenades[i]).SetColliding(true);
+					platforms[j]->SetColliding(true);
+					(*grenades[i]).HandleCollision(*platforms[j]);
+				}
+			}
 		}
 	}
 	else

@@ -5,5 +5,7 @@ class Grenade :
 {
 public:
     Grenade();
+
+    void HandleCollision(Object& otherObj) override;
 };
 
