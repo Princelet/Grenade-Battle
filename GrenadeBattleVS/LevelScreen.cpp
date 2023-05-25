@@ -18,6 +18,7 @@ LevelScreen::LevelScreen(Game* newGamePointer)
 
 void LevelScreen::Update(sf::Time frameTime)
 {
+	// Practical Task - Collision Geometry
 	if (gameRunning)
 	{
 		player1.Update(frameTime);

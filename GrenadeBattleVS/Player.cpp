@@ -14,6 +14,7 @@ Player::Player(LevelScreen* newLevel)
     sprite.setOrigin(AssetManager::RequestTexture("player_1_stand").getSize().x / 2, AssetManager::RequestTexture("player_1_stand").getSize().y / 2);
     sprite.setScale(2.0f, 2.0f);
 
+    // Practical Task - Collision Geometry
     collisionOffset = sf::Vector2f(-24.0f, -23.0f);
     collisionScale = sf::Vector2f(0.9f, 1.0f);
 
