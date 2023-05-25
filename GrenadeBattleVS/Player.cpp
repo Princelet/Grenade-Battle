@@ -6,6 +6,7 @@ Player::Player(LevelScreen* newLevel)
     : PhysicsObject()
     , p1(true)
     , level(newLevel)
+    , canJump(true)
 {
     // Starting texture
     sprite.setTexture(AssetManager::RequestTexture("player_1_stand"));
@@ -33,7 +34,7 @@ Player::Player(LevelScreen* newLevel)
 void Player::Update(sf::Time frameTime)
 {
     PhysicsObject::Update(frameTime);
-    UpdateAcceleration();
+    const float JUMPSPEED = 400;
 
     float pipTime = 0;
     float pipTimeStep = 0.1f;
@@ -46,18 +47,36 @@ void Player::Update(sf::Time frameTime)
 
     if (p1)
     {
-        if (sf::Joystick::isButtonPressed(0, 0))
+        if (sf::Joystick::isButtonPressed(0, 5))
         {
             level->Fire(1);
+        }
+        if (canJump)
+        {
+            if (sf::Joystick::isButtonPressed(0, 0))
+            {
+                velocity.y = -JUMPSPEED;
+                canJump = false;
+            }
         }
     }
     else
     {
-        if (sf::Joystick::isButtonPressed(1, 0))
+        if (sf::Joystick::isButtonPressed(1, 5))
         {
             level->Fire(2);
         }
+        if (canJump)
+        {
+            if (sf::Joystick::isButtonPressed(1, 0))
+            {
+                velocity.y = -JUMPSPEED;
+                canJump = false;
+            }
+        }
     }
+
+    UpdateAcceleration();
 }
 
 void Player::Draw(sf::RenderTarget& target)
@@ -83,6 +102,11 @@ void Player::Draw(sf::RenderTarget& target)
 void Player::SetP1(bool isP1)
 {
     p1 = isP1;
+}
+
+void Player::SetCanJump(bool newCanJump)
+{
+    canJump = newCanJump;
 }
 
 void Player::UpdateAcceleration()
@@ -140,11 +164,12 @@ void Player::UpdateAcceleration()
             }
         }
     }
-
 }
 
 sf::Vector2f Player::GetPipPosition(float pipTime)
 {
+    //Practical Task - Gravity Prediction [UNFINISHED]
+
     /*
     return pipAcceleration * pipTime * pipTime
         + pipVelocity * pipTime

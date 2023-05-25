@@ -13,12 +13,14 @@ public:
     void Draw(sf::RenderTarget& target) override;
 
     void SetP1(bool isP1);
+    void SetCanJump(bool newCanJump);
 
 private:
     void UpdateAcceleration();
     sf::Vector2f GetPipPosition(float pipTime);
     std::vector<sf::Sprite> pips;
     LevelScreen* level;
+    bool canJump;
 
     bool p1;
 };

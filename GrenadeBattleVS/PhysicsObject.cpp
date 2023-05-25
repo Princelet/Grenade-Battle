@@ -1,5 +1,12 @@
 #include "PhysicsObject.h"
 
+enum class PhysicsType
+{
+    FORWARD_EULER,
+    BACKWARD_EULER,
+    SYMPLECTIC_EULER
+};
+
 PhysicsObject::PhysicsObject()
     : Object()
 {
@@ -10,16 +17,59 @@ void PhysicsObject::Update(sf::Time frameTime)
     const float DRAG = 20.0f;
     sf::Vector2f lastFramePos = GetPosition();
 
-    // EXPLICIT EULER (FORWARD EULER)
+    // Practical Task - Physics Alternatives
+    const PhysicsType physics = PhysicsType::FORWARD_EULER;
 
-    SetPosition(GetPosition() + velocity * frameTime.asSeconds());
-    velocity += acceleration * frameTime.asSeconds();
+    switch (physics)
+    {
+    case PhysicsType::FORWARD_EULER:
+    {
+        // EXPLICIT EULER (FORWARD EULER)
 
-    // Drag Calculation
-    velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
+        SetPosition(GetPosition() + velocity * frameTime.asSeconds());
+        velocity += acceleration * frameTime.asSeconds();
 
-    // Update Acceleration
-    UpdateAcceleration();
+        // Drag Calculation
+        velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
+
+        // Update Acceleration
+        UpdateAcceleration();
+
+        break;
+    }
+    case PhysicsType::BACKWARD_EULER:
+    {
+        // IMPLICIT EULER (BACKWARD EULER)
+
+        // Update Acceleration
+        UpdateAcceleration();
+
+        velocity += acceleration * frameTime.asSeconds();
+
+        // Drag Calculation
+        velocity.x -= velocity.x * DRAG;
+
+        SetPosition(GetPosition() + velocity * frameTime.asSeconds());
+
+        break;
+    }
+    case PhysicsType::SYMPLECTIC_EULER:
+    {
+        // SEMI-IMPLICIT EULER (SYMPLECTIC EULER)
+
+        velocity += acceleration * frameTime.asSeconds();
+
+        // Drag Calculation
+        velocity.x -= velocity.x * DRAG;
+
+        SetPosition(GetPosition() + velocity * frameTime.asSeconds());
+
+        // Update Acceleration
+        UpdateAcceleration();
+
+        break;
+    }
+    }
 }
 
 void PhysicsObject::HandleCollision(Object& otherObj)

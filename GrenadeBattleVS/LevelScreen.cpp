@@ -36,6 +36,7 @@ void LevelScreen::Update(sf::Time frameTime)
 				player1.SetColliding(true);
 				platforms[i]->SetColliding(true);
 				player1.HandleCollision(*platforms[i]);
+				player1.SetCanJump(true);
 			}
 
 			if (platforms[i]->CheckCollision(player2))
@@ -43,6 +44,7 @@ void LevelScreen::Update(sf::Time frameTime)
 				player2.SetColliding(true);
 				platforms[i]->SetColliding(true);
 				player2.HandleCollision(*platforms[i]);
+				player2.SetCanJump(true);
 			}
 		}
 
@@ -87,7 +89,7 @@ void LevelScreen::Fire(int newPlayer)
 		{
 			grenades[grenades.size() - 1]->SetPosition(player1.GetPosition());
 		}
-		grenadeTimer = 100;
+		grenadeTimer = 600;
 	}
 }
 
@@ -143,8 +145,8 @@ bool LevelScreen::LoadLevel()
 
 
 	// Set the starting x and y coordinates used to position our level objects
-	float x = 0.0f;
-	float y = 0.0f;
+	float x = 500.0f;
+	float y = 150.0f;
 
 	// Define the spacing we will use for our grid
 	const float X_SPACE = 45.0f;
@@ -168,7 +170,7 @@ bool LevelScreen::LoadLevel()
 		else if (ch == '\n')
 		{
 			y += Y_SPACE;
-			x = 0.0f;
+			x = 500.0f;
 		}
 		else if (ch == '1')
 		{

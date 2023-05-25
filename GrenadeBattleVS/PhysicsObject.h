@@ -10,8 +10,6 @@ public:
 
     void HandleCollision(Object& otherObj) override;
 
-    sf::Vector2f GetOldPosition();
-
 protected:
     void UpdateAcceleration();
 
