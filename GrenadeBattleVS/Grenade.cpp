@@ -1,8 +1,11 @@
 #include "Grenade.h"
 #include "AssetManager.h"
+#include "VectorHelper.h"
 
 Grenade::Grenade()
 	: PhysicsObject()
+    , fuseTimer(1500)
+    , explodeTimer(200)
 {
     // Starting texture
     sprite.setTexture(AssetManager::RequestTexture("grenade"));
@@ -15,6 +18,18 @@ Grenade::Grenade()
     collisionScale = sf::Vector2f(0.2f, 0.25f);
 }
 
+void Grenade::Update(sf::Time frameTime)
+{
+    if (fuseTimer > 0)
+        --fuseTimer;
+    
+    if (fuseTimer == 0)
+    {
+        if (explodeTimer > 0)
+            --explodeTimer;
+    }
+}
+
 void Grenade::HandleCollision(Object& otherObj)
 {
     sf::Vector2f depth = GetCollisionDepth(otherObj);
@@ -23,15 +38,48 @@ void Grenade::HandleCollision(Object& otherObj)
     if (abs(depth.x) < abs(depth.y))
     {
         // Move in x direction
-        velocity.x = -velocity.x;
-        acceleration.x = -acceleration.x;
+        newPos.x += depth.x * 1.1f;
+        velocity.x = 0;
+        acceleration.x = 0;
+        // somethin about getnormal here
     }
     else
     {
         // Move in y direction
-        velocity.y = -velocity.y;
-        acceleration.y = -acceleration.y;
+        newPos.y += depth.y * 1.1f;
+        velocity.y = 0;
+        acceleration.y = 0;
     }
 
     SetPosition(newPos);
+}
+
+void Grenade::SetVelocity(sf::Vector2f newVel)
+{
+    velocity = newVel;
+}
+
+int Grenade::GetFuseTimer()
+{
+    return fuseTimer;
+}
+
+int Grenade::GetExplodeTimer()
+{
+    return explodeTimer;
+}
+
+void Grenade::DecreaseFuseTimer()
+{
+    --fuseTimer;
+}
+
+void Grenade::DecreaseExplodeTimer()
+{
+    --explodeTimer;
+}
+
+void Grenade::Explode()
+{
+    sprite.setTexture(AssetManager::RequestTexture("explosion"));
 }

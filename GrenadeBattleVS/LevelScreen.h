@@ -17,7 +17,7 @@ public:
 	void Update(sf::Time frameTime);
 	void Draw(sf::RenderTarget& target);
 
-	void Fire(int newPlayer);
+	void Fire(int newPlayer, sf::Vector2f firingVel);
 
 private:
 	void Restart();
@@ -26,9 +26,6 @@ private:
 	Player player1;
 	Player player2;
 	std::vector<Platform*> platforms;
-
-	int grenadeTimer;
-	std::vector<Grenade*> grenades;
 
 	bool gameRunning;
 

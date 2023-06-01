@@ -1,12 +1,14 @@
 #include "Player.h"
 #include "AssetManager.h"
 #include "LevelScreen.h"
+#include "Grenade.h"
 
 Player::Player(LevelScreen* newLevel)
     : PhysicsObject()
     , p1(true)
     , level(newLevel)
     , canJump(true)
+    , grenadeTimer(0)
 {
     // Starting texture
     sprite.setTexture(AssetManager::RequestTexture("player_1_stand"));
@@ -49,7 +51,7 @@ void Player::Update(sf::Time frameTime)
     {
         if (sf::Joystick::isButtonPressed(0, 5))
         {
-            level->Fire(1);
+            Fire(sf::Vector2f(500.0f, 500.0f));
         }
         if (canJump)
         {
@@ -64,7 +66,7 @@ void Player::Update(sf::Time frameTime)
     {
         if (sf::Joystick::isButtonPressed(1, 5))
         {
-            level->Fire(2);
+            Fire(sf::Vector2f(500.0f, 500.0f));
         }
         if (canJump)
         {
@@ -76,7 +78,33 @@ void Player::Update(sf::Time frameTime)
         }
     }
 
+    for (size_t i = 0; i < grenades.size(); ++i)
+    {
+        if (grenades[i])
+        {
+            if (grenades[i]->GetFuseTimer() > 0)
+                grenades[i]->DecreaseFuseTimer();
+
+            if (grenades[i]->GetFuseTimer() == 0)
+            {
+                grenades[i]->Explode();
+
+                if (grenades[i]->GetExplodeTimer() > 0)
+                    grenades[i]->DecreaseExplodeTimer();
+
+                if (grenades[i]->GetExplodeTimer() == 0)
+                {
+                    delete grenades[i];
+                    grenades[i] = nullptr;
+                }
+            }
+        }
+    }
+
     UpdateAcceleration();
+
+    if (grenadeTimer > 0)
+        --grenadeTimer;
 }
 
 void Player::Draw(sf::RenderTarget& target)
@@ -87,6 +115,11 @@ void Player::Draw(sf::RenderTarget& target)
     for (size_t i = 0; i < pips.size(); ++i)
     {
         target.draw(pips[i]);
+    }
+    for (size_t i = 0; i < grenades.size(); ++i)
+    {
+        if (grenades[i])
+            grenades[i]->Draw(target);
     }
 
     if (p1)
@@ -107,6 +140,34 @@ void Player::SetP1(bool isP1)
 void Player::SetCanJump(bool newCanJump)
 {
     canJump = newCanJump;
+}
+
+void Player::Fire(sf::Vector2f firingVel)
+{
+    if (grenadeTimer == 0)
+    {
+        grenades.push_back(new Grenade);
+        grenades[grenades.size() - 1]->SetVelocity(sf::Vector2f(500.0f, 500.0f));
+        grenades[grenades.size() - 1]->SetPosition(GetPosition());
+        
+        grenadeTimer = 600;
+    }
+}
+
+void Player::ClearGrenades()
+{
+    for (size_t i = 0; i < grenades.size(); ++i)
+    {
+        delete grenades[i];
+        grenades[i] = nullptr;
+    }
+
+    grenades.clear();
+}
+
+std::vector<Grenade*> Player::GetGrenades()
+{
+    return grenades;
 }
 
 void Player::UpdateAcceleration()
@@ -170,12 +231,6 @@ sf::Vector2f Player::GetPipPosition(float pipTime)
 {
     //Practical Task - Gravity Prediction [UNFINISHED]
 
-    /*
-    return pipAcceleration * pipTime * pipTime
-        + pipVelocity * pipTime
-        + pipStartingPos;
-    
-    */
     return sf::Vector2f(0, 1000) * pipTime * pipTime
         + sf::Vector2f(500, -1000) * pipTime
         + sf::Vector2f(500, 500);

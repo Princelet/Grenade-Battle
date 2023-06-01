@@ -11,7 +11,6 @@ LevelScreen::LevelScreen(Game* newGamePointer)
 	, player2(this)
 	, gameRunning(true)
 	, window(newGamePointer->GetWindow())
-	, grenadeTimer(0)
 {
 	Restart();
 }
@@ -48,18 +47,40 @@ void LevelScreen::Update(sf::Time frameTime)
 			}
 		}
 
-		for (size_t i = 0; i < grenades.size(); ++i)
+		for (size_t i = 0; i < player1.GetGrenades().size(); ++i)
 		{
-			grenades[i]->Update(frameTime);
-			grenades[i]->SetColliding(false);
-
-			for (size_t j = 0; j < platforms.size(); ++j)
+			if (player1.GetGrenades()[i])
 			{
-				if (platforms[j]->CheckCollision((*grenades[i])))
+				player1.GetGrenades()[i]->Update(frameTime);
+				player1.GetGrenades()[i]->SetColliding(false);
+
+				for (size_t j = 0; j < platforms.size(); ++j)
 				{
-					(*grenades[i]).SetColliding(true);
-					platforms[j]->SetColliding(true);
-					(*grenades[i]).HandleCollision(*platforms[j]);
+					if (platforms[j]->CheckCollision((*player1.GetGrenades()[i])))
+					{
+						(*player1.GetGrenades()[i]).SetColliding(true);
+						platforms[j]->SetColliding(true);
+						(*player1.GetGrenades()[i]).HandleCollision(*platforms[j]);
+					}
+				}
+			}
+		}
+
+		for (size_t i = 0; i < player2.GetGrenades().size(); ++i)
+		{
+			if (player2.GetGrenades()[i])
+			{
+				player2.GetGrenades()[i]->Update(frameTime);
+				player2.GetGrenades()[i]->SetColliding(false);
+
+				for (size_t j = 0; j < platforms.size(); ++j)
+				{
+					if (platforms[j]->CheckCollision((*player2.GetGrenades()[i])))
+					{
+						(*player2.GetGrenades()[i]).SetColliding(true);
+						platforms[j]->SetColliding(true);
+						(*player2.GetGrenades()[i]).HandleCollision(*platforms[j]);
+					}
 				}
 			}
 		}
@@ -69,9 +90,6 @@ void LevelScreen::Update(sf::Time frameTime)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 			Restart();
 	}
-
-	if (grenadeTimer > 0)
-		--grenadeTimer;
 }
 
 void LevelScreen::Draw(sf::RenderTarget& target)
@@ -83,24 +101,6 @@ void LevelScreen::Draw(sf::RenderTarget& target)
 	{
 		platforms[i]->Draw(target);
 	}
-	for (size_t i = 0; i < grenades.size(); ++i)
-	{
-		grenades[i]->Draw(target);
-	}
-}
-
-void LevelScreen::Fire(int newPlayer)
-{
-	if (grenadeTimer == 0)
-	{
-		grenades.push_back(new Grenade);
-
-		if (newPlayer == 1)
-		{
-			grenades[grenades.size() - 1]->SetPosition(player1.GetPosition());
-		}
-		grenadeTimer = 600;
-	}
 }
 
 void LevelScreen::Restart()
@@ -111,14 +111,10 @@ void LevelScreen::Restart()
 		delete platforms[i];
 		platforms[i] = nullptr;
 	}
-	for (size_t i = 0; i < grenades.size(); ++i)
-	{
-		delete grenades[i];
-		grenades[i] = nullptr;
-	}
-
 	platforms.clear();
-	grenades.clear();
+
+	player1.ClearGrenades();
+	player2.ClearGrenades();
 
 	player1.SetP1(true);
 	player2.SetP1(false);
