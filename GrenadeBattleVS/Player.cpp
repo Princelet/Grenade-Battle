@@ -44,7 +44,7 @@ void Player::Update(sf::Time frameTime)
     for (size_t i = 0; i < pips.size(); ++i)
     {
         pips[i].setPosition(GetPipPosition(pipTime));
-        pipTime = pipTimeStep;
+        pipTime += pipTimeStep;
     }
 
     if (p1)
@@ -180,7 +180,6 @@ void Player::UpdateAcceleration()
     acceleration.x = 0;
     acceleration.y = GRAVITY;
 
-    // Temp 2p movement
     if (p1)
     {
         // P1 Movement
@@ -190,10 +189,12 @@ void Player::UpdateAcceleration()
             if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -DEADZONE)
             {
                 acceleration.x = -ACCEL;
+                sprite.setScale(2.0f, 2.0f);
             }
             if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > DEADZONE)
             {
                 acceleration.x = ACCEL;
+                sprite.setScale(-2.0f, 2.0f);
             }
         }
     }
@@ -206,22 +207,12 @@ void Player::UpdateAcceleration()
             if (sf::Joystick::getAxisPosition(1, sf::Joystick::X) < -DEADZONE)
             {
                 acceleration.x = -ACCEL;
+                sprite.setScale(-2.0f, 2.0f);
             }
             if (sf::Joystick::getAxisPosition(1, sf::Joystick::X) > DEADZONE)
             {
                 acceleration.x = ACCEL;
-            }
-        }
-        else
-        {
-            // Temp code if no controller 2
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
-                acceleration.x = -ACCEL;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            {
-                acceleration.x = ACCEL;
+                sprite.setScale(2.0f, 2.0f);
             }
         }
     }
@@ -229,7 +220,7 @@ void Player::UpdateAcceleration()
 
 sf::Vector2f Player::GetPipPosition(float pipTime)
 {
-    //Practical Task - Gravity Prediction [UNFINISHED]
+    // Practical Task - Gravity Prediction [UNFINISHED]
 
     return sf::Vector2f(0, 1000) * pipTime * pipTime
         + sf::Vector2f(500, -1000) * pipTime

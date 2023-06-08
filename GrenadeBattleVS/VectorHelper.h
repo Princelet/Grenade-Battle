@@ -7,6 +7,7 @@ namespace VectorHelper {
 
 	sf::Vector2f Normalise(sf::Vector2f vec);
 
+	// Practical Task - Reflection
 	float Dot(sf::Vector2f a, sf::Vector2f b);
 	float Dot(sf::Vector3f a, sf::Vector3f b);
 
@@ -16,5 +17,5 @@ namespace VectorHelper {
 	sf::Vector3f GetReflection(sf::Vector3f incident, sf::Vector3f normal);
 
 	sf::Vector3f GetNormal(sf::Vector3f lineA, sf::Vector3f lineB);
-	sf::Vector2f GetNormal(sf::Vector3f line);
+	sf::Vector2f GetNormal(sf::Vector2f line);
 }

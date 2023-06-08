@@ -4,7 +4,7 @@
 
 Grenade::Grenade()
 	: PhysicsObject()
-    , fuseTimer(1500)
+    , fuseTimer(8000)
     , explodeTimer(200)
 {
     // Starting texture
@@ -20,6 +20,7 @@ Grenade::Grenade()
 
 void Grenade::Update(sf::Time frameTime)
 {
+    PhysicsObject::Update(frameTime);
     if (fuseTimer > 0)
         --fuseTimer;
     
@@ -34,21 +35,21 @@ void Grenade::HandleCollision(Object& otherObj)
 {
     sf::Vector2f depth = GetCollisionDepth(otherObj);
     sf::Vector2f newPos = GetPosition();
+    sf::Vector2f normal = VectorHelper::GetNormal(velocity);
 
     if (abs(depth.x) < abs(depth.y))
     {
         // Move in x direction
         newPos.x += depth.x * 1.1f;
-        velocity.x = 0;
-        acceleration.x = 0;
-        // somethin about getnormal here
+        velocity.x = VectorHelper::GetReflection(velocity, normal).x;
+        acceleration.x = -acceleration.x;
     }
     else
     {
         // Move in y direction
         newPos.y += depth.y * 1.1f;
-        velocity.y = 0;
-        acceleration.y = 0;
+        velocity.y = VectorHelper::GetReflection(velocity, normal).y;
+        acceleration.y = -acceleration.y;
     }
 
     SetPosition(newPos);
@@ -82,4 +83,5 @@ void Grenade::DecreaseExplodeTimer()
 void Grenade::Explode()
 {
     sprite.setTexture(AssetManager::RequestTexture("explosion"));
+    collisionScale = sf::Vector2f(0.9f, 0.9f);
 }

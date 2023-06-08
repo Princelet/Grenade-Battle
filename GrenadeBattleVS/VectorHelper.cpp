@@ -20,6 +20,8 @@ sf::Vector2f VectorHelper::Normalise(sf::Vector2f vec)
 	return vec;
 }
 
+// Practical Task - Reflection
+
 float VectorHelper::Dot(sf::Vector2f a, sf::Vector2f b)
 {
 	return a.x * b.x + a.y * b.y;
@@ -54,7 +56,7 @@ sf::Vector3f VectorHelper::GetNormal(sf::Vector3f lineA, sf::Vector3f lineB)
 	return Cross(lineA, lineB);
 }
 
-sf::Vector2f VectorHelper::GetNormal(sf::Vector3f line)
+sf::Vector2f VectorHelper::GetNormal(sf::Vector2f line)
 {
 	return sf::Vector2f(line.y, -line.x);
 }

@@ -11,7 +11,16 @@ LevelScreen::LevelScreen(Game* newGamePointer)
 	, player2(this)
 	, gameRunning(true)
 	, window(newGamePointer->GetWindow())
+	, p1Lives(3)
+	, p2Lives(3)
+	, endPanel(newGamePointer->GetWindow(), "Title", "Message")
 {
+	// Lives display
+	AssetManager::SetupText(p1Text, "dogica", "Cyan", "3");
+	AssetManager::SetupText(p2Text, "dogica", "Cyan", "3");
+	p1Text.setPosition(window->getSize().x / 2 - 340.0f, 200.0f);
+	p2Text.setPosition(window->getSize().x / 2 + 340.0f, 200.0f);
+
 	Restart();
 }
 
@@ -20,6 +29,9 @@ void LevelScreen::Update(sf::Time frameTime)
 	// Practical Task - Collision Geometry
 	if (gameRunning)
 	{
+		p1Text.setString(std::to_string(p1Lives));
+		p2Text.setString(std::to_string(p2Lives));
+
 		player1.Update(frameTime);
 		player1.SetColliding(false);
 		player2.Update(frameTime);
@@ -63,6 +75,13 @@ void LevelScreen::Update(sf::Time frameTime)
 						(*player1.GetGrenades()[i]).HandleCollision(*platforms[j]);
 					}
 				}
+				if (player1.GetGrenades()[i]->CheckCollision(player2))
+				{
+					player2.SetColliding(true);
+					player1.GetGrenades()[i]->SetColliding(true);
+					player2.HandleCollision(*player1.GetGrenades()[i]);
+					NewRound(true);
+				}
 			}
 		}
 
@@ -82,6 +101,13 @@ void LevelScreen::Update(sf::Time frameTime)
 						(*player2.GetGrenades()[i]).HandleCollision(*platforms[j]);
 					}
 				}
+				if (player2.GetGrenades()[i]->CheckCollision(player1))
+				{
+					player1.SetColliding(true);
+					player2.GetGrenades()[i]->SetColliding(true);
+					player1.HandleCollision(*player2.GetGrenades()[i]);
+					NewRound(false);
+				}
 			}
 		}
 	}
@@ -94,13 +120,39 @@ void LevelScreen::Update(sf::Time frameTime)
 
 void LevelScreen::Draw(sf::RenderTarget& target)
 {
-	player1.Draw(target);
-	player2.Draw(target);
 	// Draw objects
 	for (size_t i = 0; i < platforms.size(); ++i)
 	{
 		platforms[i]->Draw(target);
 	}
+
+	player1.Draw(target);
+	player2.Draw(target);
+	
+	target.draw(p1Text);
+	target.draw(p2Text);
+}
+
+void LevelScreen::NewRound(bool p1Win)
+{
+	if (true)
+	{
+		--p2Lives;
+	}
+	else
+		--p1Lives;
+
+	if (p1Lives == 0)
+	{
+		GameOver(false);
+	}
+	if (p2Lives == 0)
+	{
+		GameOver(true);
+	}
+
+	if (p1Lives > 0 && p2Lives > 0)
+		Restart();
 }
 
 void LevelScreen::Restart()
@@ -151,7 +203,7 @@ bool LevelScreen::LoadLevel()
 
 
 	// Set the starting x and y coordinates used to position our level objects
-	float x = 500.0f;
+	float x = 570.0f;
 	float y = 150.0f;
 
 	// Define the spacing we will use for our grid
@@ -176,7 +228,7 @@ bool LevelScreen::LoadLevel()
 		else if (ch == '\n')
 		{
 			y += Y_SPACE;
-			x = 500.0f;
+			x = 570.0f;
 		}
 		else if (ch == '1')
 		{
@@ -208,4 +260,21 @@ bool LevelScreen::LoadLevel()
 
 	// Return true since we successfully loaded the file
 	return true;
+}
+
+void LevelScreen::GameOver(bool p1Win)
+{
+	// Get High Scores
+	endPanel.SetBody("P1 had " + std::to_string(p1Lives) + ".\nP2 had " + std::to_string(p1Lives) + ".");
+
+	if (p1Win)
+	{
+		endPanel.StartAnimation(true);
+	}
+	else
+	{
+		endPanel.StartAnimation(false);
+	}
+
+	gameRunning = false;
 }
