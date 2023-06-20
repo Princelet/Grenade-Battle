@@ -18,7 +18,7 @@ void PhysicsObject::Update(sf::Time frameTime)
     sf::Vector2f lastFramePos = GetPosition();
 
     // Practical Task - Physics Alternatives
-    const PhysicsType physics = PhysicsType::FORWARD_EULER;
+    const PhysicsType physics = PhysicsType::SYMPLECTIC_EULER;
 
     switch (physics)
     {
