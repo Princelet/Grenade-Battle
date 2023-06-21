@@ -113,9 +113,12 @@ void LevelScreen::Update(sf::Time frameTime)
 	}
 	else
 	{
+		endPanel.Update(frameTime);
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 			Restart();
 	}
+
 }
 
 void LevelScreen::Draw(sf::RenderTarget& target)
@@ -131,6 +134,9 @@ void LevelScreen::Draw(sf::RenderTarget& target)
 	
 	target.draw(p1Text);
 	target.draw(p2Text);
+
+	if (!gameRunning)
+		endPanel.Draw(target);
 }
 
 void LevelScreen::NewRound(bool p1Win)
@@ -264,9 +270,6 @@ bool LevelScreen::LoadLevel()
 
 void LevelScreen::GameOver(bool p1Win)
 {
-	// Get High Scores
-	endPanel.SetBody("P1 had " + std::to_string(p1Lives) + ".\nP2 had " + std::to_string(p1Lives) + ".");
-
 	if (p1Win)
 	{
 		endPanel.StartAnimation(true);

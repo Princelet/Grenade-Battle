@@ -52,21 +52,21 @@ void Grenade::HandleCollision(Object& otherObj)
     {
         // Top left
         pointA = sf::Vector2f(otherObj.GetAABB().left, otherObj.GetAABB().top);
-        // Top right
-        pointB = sf::Vector2f(otherObj.GetAABB().left + otherObj.GetAABB().width, otherObj.GetAABB().top);
+        // Bottom left
+        pointB = sf::Vector2f(otherObj.GetAABB().left, otherObj.GetAABB().top + otherObj.GetAABB().height);
 
         // Move in x direction
-        newPos.x += depth.x * 1.1f;
+        newPos.x += depth.x * 2.0f;
     }
     else
     {
         // Top left
         pointA = sf::Vector2f(otherObj.GetAABB().left, otherObj.GetAABB().top);
-        // Bottom left
-        pointB = sf::Vector2f(otherObj.GetAABB().left, otherObj.GetAABB().top + otherObj.GetAABB().height);
+        // Top right
+        pointB = sf::Vector2f(otherObj.GetAABB().left + otherObj.GetAABB().width, otherObj.GetAABB().top);
 
         // Move in y direction
-        newPos.y += depth.y * 1.1f;
+        newPos.y += depth.y * 2.0f;
     }
 
     // Get normal

@@ -84,14 +84,14 @@ void PhysicsObject::HandleCollision(Object& otherObj)
     if (abs(depth.x) < abs(depth.y))
     {
         // Move in x direction
-        newPos.x += depth.x * 1.1f;
+        newPos.x += depth.x * 2.0f;
         velocity.x = 0;
         acceleration.x = 0;
     }
     else
     {
         // Move in y direction
-        newPos.y += depth.y * 1.1f;
+        newPos.y += depth.y * 2.0f;
         velocity.y = 0;
         acceleration.y = 0;
     }

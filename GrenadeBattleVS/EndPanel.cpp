@@ -12,6 +12,7 @@ EndPanel::EndPanel(sf::RenderWindow* newWindow, std::string titleText, std::stri
 	, xPos()
 {
 	AssetManager::SetupText(message, "dogica", "Cyan", messageText);
+	message.setPosition(-100, -100);
 
 	ResetPosition();
 }
@@ -46,7 +47,7 @@ void EndPanel::Draw(sf::RenderTarget& target)
 void EndPanel::SetPosition(sf::Vector2f newPosition)
 {
 	float messageX = (background.getGlobalBounds().width - message.getGlobalBounds().width) * 0.5f;
-	message.setPosition(newPosition.x + messageX, newPosition.y + 150);
+	message.setPosition(newPosition.x + messageX, newPosition.y);
 }
 
 void EndPanel::StartAnimation(bool p1Win)
