@@ -9,13 +9,14 @@ Player::Player(LevelScreen* newLevel)
     , level(newLevel)
     , canJump(true)
     , grenadeTimer(0)
+    , aimVel(sf::Vector2f(500.0f, -1000.0f))
 {
     // Starting texture
     sprite.setTexture(AssetManager::RequestTexture("player_1_stand"));
 
     // Set origin and scale
-    sprite.setOrigin(AssetManager::RequestTexture("player_1_stand").getSize().x / 2, AssetManager::RequestTexture("player_1_stand").getSize().y / 2);
     sprite.setScale(2.0f, 2.0f);
+    sprite.setOrigin(AssetManager::RequestTexture("player_1_stand").getSize().x / 2, AssetManager::RequestTexture("player_1_stand").getSize().y / 2);
 
     // Practical Task - Collision Geometry
     collisionOffset = sf::Vector2f(-24.0f, -23.0f);
@@ -24,7 +25,7 @@ Player::Player(LevelScreen* newLevel)
     acceleration = sf::Vector2f(100, 100);
 
     // Add sprite to my pips
-    const int NUM_PIPS = 5;
+    const int NUM_PIPS = 10;
     for (int i = 0; i < NUM_PIPS; ++i)
     {
         pips.push_back(sf::Sprite());
@@ -49,10 +50,14 @@ void Player::Update(sf::Time frameTime)
 
     if (p1)
     {
-        if (sf::Joystick::isButtonPressed(0, 5))
+        if (sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z) < -90)
         {
             Fire(sf::Vector2f(500.0f, 500.0f));
         }
+
+        aimVel.x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U) * 8.0f;
+        aimVel.y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V) * 8.0f;
+
         if (canJump)
         {
             if (sf::Joystick::isButtonPressed(0, 0))
@@ -64,10 +69,14 @@ void Player::Update(sf::Time frameTime)
     }
     else
     {
-        if (sf::Joystick::isButtonPressed(1, 5))
+        if (sf::Joystick::getAxisPosition(1, sf::Joystick::Axis::Z) < -90)
         {
             Fire(sf::Vector2f(500.0f, 500.0f));
         }
+
+        aimVel.x = sf::Joystick::getAxisPosition(1, sf::Joystick::Axis::U) * 8.0f;
+        aimVel.y = sf::Joystick::getAxisPosition(1, sf::Joystick::Axis::V) * 8.0f;
+
         if (canJump)
         {
             if (sf::Joystick::isButtonPressed(1, 0))
@@ -147,10 +156,10 @@ void Player::Fire(sf::Vector2f firingVel)
     if (grenadeTimer == 0)
     {
         grenades.push_back(new Grenade);
-        grenades[grenades.size() - 1]->SetVelocity(sf::Vector2f(500.0f, 500.0f));
+        grenades[grenades.size() - 1]->SetVelocity(aimVel);
         grenades[grenades.size() - 1]->SetPosition(GetPosition());
         
-        grenadeTimer = 600;
+        grenadeTimer = 1000;
     }
 }
 
@@ -221,8 +230,9 @@ void Player::UpdateAcceleration()
 sf::Vector2f Player::GetPipPosition(float pipTime)
 {
     // Practical Task - Gravity Prediction [UNFINISHED]
+    const sf::Vector2f GRAVITY (0.0f, 1000.0f);
 
-    return sf::Vector2f(0, 1000) * pipTime * pipTime
-        + sf::Vector2f(500, -1000) * pipTime
-        + sf::Vector2f(500, 500);
+    return GRAVITY * pipTime * pipTime / 2.0f
+        + aimVel * pipTime
+        + GetPosition();
 }

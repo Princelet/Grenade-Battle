@@ -9,6 +9,7 @@ enum class PhysicsType
 
 PhysicsObject::PhysicsObject()
     : Object()
+    , hasDrag(true)
 {
 }
 
@@ -18,7 +19,7 @@ void PhysicsObject::Update(sf::Time frameTime)
     sf::Vector2f lastFramePos = GetPosition();
 
     // Practical Task - Physics Alternatives
-    const PhysicsType physics = PhysicsType::SYMPLECTIC_EULER;
+    const PhysicsType physics = PhysicsType::FORWARD_EULER;
 
     switch (physics)
     {
@@ -30,7 +31,8 @@ void PhysicsObject::Update(sf::Time frameTime)
         velocity += acceleration * frameTime.asSeconds();
 
         // Drag Calculation
-        velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
+        if (hasDrag)
+            velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
 
         // Update Acceleration
         UpdateAcceleration();
@@ -47,7 +49,8 @@ void PhysicsObject::Update(sf::Time frameTime)
         velocity += acceleration * frameTime.asSeconds();
 
         // Drag Calculation
-        velocity.x -= velocity.x * DRAG;
+        if (hasDrag)
+            velocity.x -= velocity.x * DRAG;
 
         SetPosition(GetPosition() + velocity * frameTime.asSeconds());
 
@@ -60,7 +63,8 @@ void PhysicsObject::Update(sf::Time frameTime)
         velocity += acceleration * frameTime.asSeconds();
 
         // Drag Calculation
-        velocity.x -= velocity.x * DRAG;
+        if (hasDrag)
+            velocity.x -= velocity.x * DRAG;
 
         SetPosition(GetPosition() + velocity * frameTime.asSeconds());
 

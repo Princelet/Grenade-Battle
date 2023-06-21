@@ -27,6 +27,7 @@ private:
 
     std::vector<sf::Sprite> pips;
     std::vector<Grenade*> grenades;
+    sf::Vector2f aimVel;
 
     LevelScreen* level;
     bool canJump;

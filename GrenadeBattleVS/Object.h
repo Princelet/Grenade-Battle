@@ -26,6 +26,7 @@ public:
 
 	sf::Vector2f GetCollisionDepth(Object otherObj);
 	virtual void HandleCollision(Object& otherObj);
+	sf::FloatRect GetAABB();
 
 	void SetAlive(bool newAlive);
 
@@ -43,7 +44,6 @@ private:
 	sf::Vector2f position;
 	sf::Vector2f GetCollisionCentre();
 	float GetCircleColliderRadius();
-	sf::FloatRect GetAABB();
 
 	bool colliding;
 };
