@@ -29,7 +29,7 @@ void EndPanel::Update(sf::Time frameTime)
 		float duration = 1.2f;
 		float time = animationClock.getElapsedTime().asSeconds();
 
-		SetPosition(Easing::QuadIn(begin, change, duration, time));
+		SetPosition(Easing::QuadOut(begin, change, duration, time));
 
 		if (time >= duration)
 		{

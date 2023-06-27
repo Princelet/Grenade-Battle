@@ -6,7 +6,7 @@ sf::Vector2f Easing::Linear(sf::Vector2f begin, sf::Vector2f change, float durat
 	return (change / duration) * time + begin;
 }
 
-sf::Vector2f Easing::QuadIn(sf::Vector2f begin, sf::Vector2f change, float duration, float time)
+sf::Vector2f Easing::QuadOut(sf::Vector2f begin, sf::Vector2f change, float duration, float time)
 {
-	return (change / (duration * duration)) * (time * time) + begin;
+	return -(change * (time * time) / (duration * duration)) + ((2.0f * change * time) / duration) + begin;
 }

@@ -3,5 +3,5 @@
 
 namespace Easing {
 	sf::Vector2f Linear(sf::Vector2f begin, sf::Vector2f change, float duration, float time);
-	sf::Vector2f QuadIn(sf::Vector2f begin, sf::Vector2f change, float duration, float time);
+	sf::Vector2f QuadOut(sf::Vector2f begin, sf::Vector2f change, float duration, float time);
 }
