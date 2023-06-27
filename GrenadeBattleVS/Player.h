@@ -22,7 +22,7 @@ public:
     std::vector<Grenade*> GetGrenades();
 
 private:
-    void UpdateAcceleration();
+    void UpdateAcceleration() override;
     sf::Vector2f GetPipPosition(float pipTime);
 
     std::vector<sf::Sprite> pips;

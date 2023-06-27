@@ -11,7 +11,7 @@ public:
     void HandleCollision(Object& otherObj) override;
 
 protected:
-    void UpdateAcceleration();
+    virtual void UpdateAcceleration();
 
     sf::Vector2f velocity;
     sf::Vector2f acceleration;

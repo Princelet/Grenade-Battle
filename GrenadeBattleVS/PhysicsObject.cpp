@@ -19,7 +19,7 @@ void PhysicsObject::Update(sf::Time frameTime)
     sf::Vector2f lastFramePos = GetPosition();
 
     // Practical Task - Physics Alternatives
-    const PhysicsType physics = PhysicsType::FORWARD_EULER;
+    const PhysicsType physics = PhysicsType::SYMPLECTIC_EULER;
 
     switch (physics)
     {
@@ -50,7 +50,7 @@ void PhysicsObject::Update(sf::Time frameTime)
 
         // Drag Calculation
         if (hasDrag)
-            velocity.x -= velocity.x * DRAG;
+            velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
 
         SetPosition(GetPosition() + velocity * frameTime.asSeconds());
 
@@ -64,7 +64,7 @@ void PhysicsObject::Update(sf::Time frameTime)
 
         // Drag Calculation
         if (hasDrag)
-            velocity.x -= velocity.x * DRAG;
+            velocity.x -= velocity.x * DRAG * frameTime.asSeconds();
 
         SetPosition(GetPosition() + velocity * frameTime.asSeconds());
 

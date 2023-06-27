@@ -23,6 +23,7 @@ Player::Player(LevelScreen* newLevel)
     collisionScale = sf::Vector2f(0.9f, 1.0f);
 
     acceleration = sf::Vector2f(100, 100);
+    hasDrag = true;
 
     // Add sprite to my pips
     const int NUM_PIPS = 10;
@@ -109,8 +110,6 @@ void Player::Update(sf::Time frameTime)
             }
         }
     }
-
-    UpdateAcceleration();
 
     if (grenadeTimer > 0)
         --grenadeTimer;
